@@ -424,7 +424,7 @@ def download_data_constituents(index: str) -> pd.DataFrame:
     ----------
         pd.DataFrame: A DataFrame containing the processed constituent data.
     """
-    symbol_blacklist = {"", "USD", "GXU4", "EUR", "MARGIN_EUR", "MLIFT"}
+    symbol_blacklist = {"", "USD", "GXU4", "EUR", "MARGIN_EUR", "MLIFT", "CBOE"}
     supported_indexes = list_supported_indexes()
 
     if index not in supported_indexes["index"].values:
@@ -459,6 +459,7 @@ def download_data_constituents(index: str) -> pd.DataFrame:
     else:
         raise ValueError("Unknown column format in downloaded data.")
 
+    df = df.dropna()
     df = df[~df["symbol"].isin(symbol_blacklist)]
     df = df[df["name"] != ""]
     df = df[~df["name"].str.contains(index, case=False, na=False)]
@@ -487,17 +488,29 @@ def download_data_constituents(index: str) -> pd.DataFrame:
         "Bovespa": ".SA",
         "Mexican Stock Exchange": ".MX",
         "Stockholm Stock Exchange": ".ST",
-        "Oslo Stock Exchange": ".OL",
+        "Oslo Bors Asa": ".OL",
         "Johannesburg Stock Exchange": ".J",
         "Korea Exchange": ".KS",
         "Shanghai Stock Exchange": ".SS",
         "Shenzhen Stock Exchange": ".SZ",
+        "Irish Stock Exchange - All Market": ".IR",
+        "Toronto Stock Exchange": ".TO",
+        "Bolsa De Madrid": ".MC",
+        "Osaka Securities Exchange": ".T",
+        "Wiener Boerse Ag": ".VI",
+        "Omx Nordic Exchange Copenhagen A/S": ".CO",
+        "Hong Kong Exchanges And Clearing Ltd": ".HK",
+        "Nasdaq Omx Nordic": ".ST",
+        "Nyse Euronext - Euronext Brussels": ".BR",
+        "Nyse Euronext - Euronext Lisbon": ".LS",
+        "New Zealand Exchange Ltd": ".NZ"
     }
+    
     df["symbol"] = df.apply(
         lambda row: row["symbol"] + exchange_suffixes.get(row["exchange"], ""),
         axis=1,
     )
-
+    
     return df
 
 

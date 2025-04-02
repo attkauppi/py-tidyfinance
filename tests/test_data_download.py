@@ -178,6 +178,11 @@ def test_download_data_constituents_valid_index():
     assert isinstance(df, pd.DataFrame), "Function should return a DataFrame"
     assert not df.empty, "Returned DataFrame should not be empty"
 
+def test_download_data_constituents_valid_index_MSCI():
+    """Test that valid index works."""
+    df = download_data_constituents("MSCI World")
+    assert isinstance(df, pd.DataFrame), "Function should return a DataFrame"
+    assert not df.empty, "Returned DataFrame should not be empty"
 
 def test_download_data_factors_ff_valid():
     df = download_data_factors_ff("F-F_Research_Data_5_Factors_2x3_daily")
